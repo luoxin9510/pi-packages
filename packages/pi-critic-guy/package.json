@@ -1,0 +1,41 @@
+{
+  "name": "@nukcole-xinluo9510/pi-critic-guy",
+  "version": "0.2.0",
+  "private": false,
+  "type": "module",
+  "description": "Pi extension — spawn a second-opinion reviewer by typing \"critic\"",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "critic",
+    "review",
+    "code-review"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luoxin9510/pi-packages.git",
+    "directory": "packages/pi-critic-guy"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test test/index.test.ts"
+  },
+  "files": [
+    "extensions",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ],
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-critic-guy/main/assets/philosophy.png"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.79"
+  }
+}
