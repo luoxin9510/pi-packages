@@ -1,13 +1,13 @@
-# 🛡️ pi-write-guard
+# 🛡️ pi-write-coach
 
 Stop the LLM from landing **broken, half-written files**. When a model tries to
 write a huge file in one shot, the output can be truncated mid-stream and leave
-a corrupted file on disk. `pi-write-guard` forces large files to be built
+a corrupted file on disk. `pi-write-coach` forces large files to be built
 incrementally — a skeleton first, then small edits — so nothing can be
 truncated into garbage.
 
 ```bash
-pi install npm:@nukcole-xinluo9510/pi-write-guard
+pi install npm:@nukcole-xinluo9510/pi-write-coach
 ```
 
 ---

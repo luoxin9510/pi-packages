@@ -1,28 +1,33 @@
 {
-  "name": "@nukcole-xinluo9510/pi-write-guard",
+  "name": "@nukcole-xinluo9510/pi-write-coach",
   "version": "0.1.0",
   "private": false,
   "type": "module",
-  "description": "Pi extension — block oversized file writes, enforce skeleton + edit pattern to save output tokens",
+  "description": "Pi extension — coach the model to build large files incrementally, prevent truncated broken files",
   "keywords": [
     "pi-package",
     "pi",
     "write",
-    "tokens",
     "skeleton",
-    "guard"
+    "incremental",
+    "coach",
+    "file-safety"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luoxin9510/pi-packages.git",
-    "directory": "packages/pi-write-guard"
+    "directory": "packages/pi-write-coach"
   },
   "files": [
     "extensions",
+    "test",
     "README.md",
     "LICENSE"
   ],
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/index.test.ts"
+  },
   "publishConfig": {
     "access": "public"
   },

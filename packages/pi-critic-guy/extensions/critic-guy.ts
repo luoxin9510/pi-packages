@@ -38,7 +38,7 @@ const CRITIC_MARKER = "## Capability: Critic Guy (subagent review)";
 // confined to the workspace and the child inherits env vars, so a prompt-injected
 // critic could otherwise read credentials and feed them back into the main context.
 const CRITIC_PERSONA =
-	"You are Critic Guy — an independent reviewer. Analyze the content and give your honest assessment. Decide what matters most. Be direct and constructive. Support your points with specifics. Only review the files/content named in the task; never read credentials, secrets, or dotfiles (.env, ~/.ssh, ~/.aws, ~/.pi/agent/auth.json) or anything outside the review target.";
+	"You are Critic Guy — an independent reviewer. Review only the files/content named in the task; read them before judging. Never read credentials, secrets, or dotfiles (.env, ~/.ssh, ~/.aws, ~/.pi/agent/auth.json) or anything outside the target. Be direct, specific, constructive. Weigh correctness, security, clarity, tests, and performance — focus on what matters most. Sort every finding into BAD (broken or unsafe — must fix), UGLY (smell, unclear, or untested — should fix), or OK (fine / done well). Never ask questions or wait for input — you run in a fresh non-interactive session; if something is missing, state your assumption and judge anyway. End with exactly one line: 'VERDICT: PASS' when there are zero BAD and zero UGLY findings, otherwise 'VERDICT: FAIL'.";
 
 const CRITIC_INSTRUCTIONS = (modelId: string) => `
 
@@ -66,6 +66,18 @@ pi -p --offline -ne --no-session -nc --model "${modelId}" --tools ${CRITIC_TOOLS
 Always give the critic concrete file paths and tell it to read them before judging;
 this stops it inventing features or tests that aren't in the code. Run multiple in
 parallel however you see fit, then present the critique(s) to the user.
+
+Each critic ends with a \`VERDICT: PASS/FAIL\` line — PASS only when it found nothing
+BAD or UGLY. Surface each critic's findings and verdict to the user; if any FAILed,
+lead with what must change.
+
+If a critic times out or returns no \`VERDICT\` line, first judge why. If it looks
+like a transient failure (model/network hiccup), one identical retry is fine.
+Otherwise treat the scope as too large: split that target into smaller,
+non-overlapping slices and spawn one fresh critic per slice — never give two critics
+overlapping scope, and don't keep repeating the same run. If a target is already a
+minimal, indivisible unit (a single small file or function) and still can't finish,
+stop splitting and just report the timeout and likely cause to the user.
 
 Model: \`${modelId}\` (resolved by the extension — use as-is).
 `;
@@ -127,6 +139,33 @@ export function parseModelQuery(prompt: string): string {
 	if (usingMatch) return usingMatch[1];
 
 	return "";
+}
+
+/**
+ * Extract a critic's verdict from its output text.
+ * The persona requires the critic to end with a `VERDICT: PASS/FAIL` line, so a
+ * MISSING verdict is itself signal: the run was truncated/timed out — the caller
+ * should retry or split (see the timeout guidance in CRITIC_INSTRUCTIONS) rather
+ * than treat it as a pass.
+ *
+ * Robustness choices:
+ *  - Strip markdown emphasis (* ` _) first, so `**VERDICT:** PASS` and
+ *    `` `VERDICT: FAIL` `` — both very common in LLM output — parse cleanly.
+ *  - Anchor to the line start (`^`, `m` flag) and allow only same-line spacing
+ *    (`[ \t]*`, never `\s` which would jump newlines). This keeps a prose mention
+ *    like "...won't give VERDICT: PASS unless..." from being read as a real verdict,
+ *    and stops a later in-body mention from beating the genuine final line.
+ *  - Among genuine line-anchored verdicts, take the LAST one (the closing line wins).
+ *
+ * Exported as a reusable helper (CI / future programmatic callers); the
+ * injection-only extension doesn't consume it at runtime.
+ */
+export function parseVerdict(output: string): "PASS" | "FAIL" | null {
+	if (!output) return null;
+	const cleaned = output.replace(/[*`_]/g, "");
+	const matches = [...cleaned.matchAll(/^\s*VERDICT:[ \t]*(PASS|FAIL)\b/gim)];
+	if (matches.length === 0) return null;
+	return matches[matches.length - 1][1].toUpperCase() as "PASS" | "FAIL";
 }
 
 export default function (pi: ExtensionAPI) {
