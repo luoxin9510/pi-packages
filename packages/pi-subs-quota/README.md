@@ -1,34 +1,46 @@
-# @nukcole-xinluo9510/pi-subs-quota
+# 📊 pi-subs-quota
 
-Pi extension — live Claude subscription (and API) quota widget, shown below the editor without any extra dependencies.
+**Know before you're throttled.** A pi extension that shows your live Claude quota
+directly below the editor — no powerline, no extra API calls, no configuration.
 
-## Features
-
-- **Live widget** — shows a compact quota bar below the editor on every turn
-- **Works for both** subscription (OAuth) and regular API key users
-- **Zero overhead** — reads rate-limit headers from existing API responses, no extra requests
-- **Startup probe** — fetches initial values immediately when pi starts
-- **`/quota` command** — detailed breakdown with progress bars and reset countdowns
-
-## Install
+<p align="center">
+  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.svg" alt="pi-subs-quota — know before you're throttled" width="840">
+</p>
 
 ```bash
 pi install npm:@nukcole-xinluo9510/pi-subs-quota
 ```
 
-## Usage
+---
 
-Once installed, a widget appears automatically below the editor:
+## The insight
+
+Every Anthropic API response already carries this:
+
+```
+anthropic-ratelimit-unified-5h-utilization: 0.14
+anthropic-ratelimit-unified-7d-utilization: 0.06
+anthropic-ratelimit-unified-5h-reset: 1781764800
+```
+
+This extension intercepts those headers via pi's `after_provider_response` hook and
+renders them as a persistent widget row — reading free data that was always there.
+
+> **Zero extra API calls. Zero extra cost. Zero configuration.**
+
+## What you see
+
+A compact line appears below your editor on every turn:
 
 ```
  🟢 5h:14% ↺2h30m   🟢 7d:6% ↺4d12h   ⏰5h
 ```
 
-For a detailed view, type `/quota` in any pi session:
+Type `/quota` for a detailed breakdown:
 
 ```
 ╭─ Claude Subscription Quota ─────────────────
-│ 5h window  🟢 ██░░░░░░░░░░░░░░  14%
+│ 5h window  🟢 ████░░░░░░░░░░░░  14%
 │            ↺ resets in 2h30m
 │ 7d window  🟢 █░░░░░░░░░░░░░░░   6%
 │            ↺ resets in 4d12h
@@ -38,24 +50,46 @@ For a detailed view, type `/quota` in any pi session:
 
 | Icon | Meaning |
 |------|---------|
-| 🟢 | < 70% used |
-| 🟡 | 70–90% used |
-| 🔴 | > 90% used |
-| ⛔ | Blocked |
+| 🟢 | < 70% used — you're fine |
+| 🟡 | 70–90% used — start wrapping up |
+| 🔴 | > 90% used — throttle imminent |
 | 🔶 | Throttled |
+| ⛔ | Blocked |
+
+The `⏰5h` / `⏰7d` indicator shows which window is currently your binding constraint.
+
+## Highlights
+
+- 📡 **Passive by design** — reads headers already in every API response, adds nothing
+- 🖥️ **No powerline required** — uses pi's native `setWidget` API, works standalone
+- 🔑 **Dual auth** — auto-detects OAuth subscription token or `ANTHROPIC_API_KEY`
+- 🚀 **Instant startup** — probes on session start so you see data before your first turn
+- 🪶 **Zero dependencies** — only node built-ins, one peer (`@earendil-works/pi-coding-agent`)
+
+## Install
+
+```bash
+pi install npm:@nukcole-xinluo9510/pi-subs-quota
+```
+
+Restart pi. The widget appears automatically.
 
 ## How it works
 
-Anthropic includes rate-limit utilization headers on every API response:
+`pi-subs-quota` hooks two pi events:
 
-```
-anthropic-ratelimit-unified-5h-utilization: 0.14
-anthropic-ratelimit-unified-7d-utilization: 0.06
-```
+**`after_provider_response`** — fires on every API call pi makes. Extracts the
+`anthropic-ratelimit-unified-*` headers and calls `ctx.ui.setWidget()` to update
+the row below your editor. No requests of its own — pure interception.
 
-This extension intercepts those headers via pi's `after_provider_response` hook and renders them as a persistent `setWidget` row — no powerline required.
+**`session_start`** — makes one lightweight probe (1-token message to claude-haiku)
+to populate initial values before you send your first message.
 
-Auth is auto-detected from `~/.pi/agent/auth.json` (OAuth subscription) or `ANTHROPIC_API_KEY` (regular API key).
+Auth is resolved in order:
+
+1. `ANTHROPIC_API_KEY` environment variable
+2. `~/.pi/agent/auth.json` → OAuth access token (subscription login)
+3. `~/.pi/agent/auth.json` → API key
 
 ## Requirements
 

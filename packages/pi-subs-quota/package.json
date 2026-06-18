@@ -20,6 +20,7 @@
   },
   "files": [
     "extensions",
+    "assets",
     "README.md",
     "LICENSE"
   ],
@@ -29,7 +30,8 @@
   "pi": {
     "extensions": [
       "./extensions"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.svg"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.79"
