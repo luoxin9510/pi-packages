@@ -31,7 +31,7 @@
     "extensions": [
       "./extensions"
     ],
-    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.svg"
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.png"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.79"

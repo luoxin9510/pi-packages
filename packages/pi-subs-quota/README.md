@@ -4,7 +4,7 @@
 directly below the editor — no powerline, no extra API calls, no configuration.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.svg" alt="pi-subs-quota — know before you're throttled" width="840">
+  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.png" alt="pi-subs-quota — know before you're throttled" width="840">
 </p>
 
 ```bash
