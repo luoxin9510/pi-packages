@@ -1,14 +1,14 @@
-# 📊 pi-subs-quota
+# 📊 pi-claude-subs-quota
 
 **Know before you're throttled.** A pi extension that shows your live Claude quota
 directly below the editor — no powerline, no extra API calls, no configuration.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.png" alt="pi-subs-quota — know before you're throttled" width="840">
+  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-claude-subs-quota/assets/quota-viz.png" alt="pi-claude-subs-quota — know before you're throttled" width="840">
 </p>
 
 ```bash
-pi install npm:@nukcole-xinluo9510/pi-subs-quota
+pi install npm:@nukcole-xinluo9510/pi-claude-subs-quota
 ```
 
 ---
@@ -69,14 +69,14 @@ The `⏰5h` / `⏰7d` indicator shows which window is currently your binding con
 ## Install
 
 ```bash
-pi install npm:@nukcole-xinluo9510/pi-subs-quota
+pi install npm:@nukcole-xinluo9510/pi-claude-subs-quota
 ```
 
 Restart pi. The widget appears automatically.
 
 ## How it works
 
-`pi-subs-quota` hooks two pi events:
+`pi-claude-subs-quota` hooks two pi events:
 
 **`after_provider_response`** — fires on every API call pi makes. Extracts the
 `anthropic-ratelimit-unified-*` headers and calls `ctx.ui.setWidget()` to update

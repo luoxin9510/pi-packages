@@ -67,11 +67,11 @@
     <tspan fill="#8b949e">anthropic-ratelimit-unified-</tspan><tspan fill="#f0883e">7d-reset</tspan><tspan fill="#8b949e">: </tspan><tspan fill="#e6edf3">1782237600</tspan>
   </text>
 
-  <text x="88" y="382" font-size="13.5" fill="#6e7681">anthropic-ratelimit-unified-5h-status: <tspan fill="#3fb950">allowed</tspan></text>
-  <text x="88" y="404" font-size="13.5" fill="#6e7681">anthropic-ratelimit-unified-representative-claim: <tspan fill="#e6edf3">five_hour</tspan></text>
+  <text x="88" y="382" font-size="12" fill="#6e7681">anthropic-ratelimit-unified-5h-status: <tspan fill="#3fb950">allowed</tspan></text>
+  <text x="88" y="404" font-size="12" fill="#6e7681">...representative-claim: <tspan fill="#e6edf3">five_hour</tspan></text>
 
   <!-- Label under left panel -->
-  <text x="313" y="460" font-size="13" fill="#6e7681" text-anchor="middle">← already in every response, no extra cost</text>
+  <text x="313" y="462" font-size="13" fill="#6e7681" text-anchor="middle">already in every response · no extra cost</text>
 
   <!-- ═══════════ ARROW ═══════════ -->
   <line x1="566" y1="297" x2="622" y2="297" stroke="#3fb950" stroke-width="2.5" marker-end="url(#arrow)"/>
@@ -85,32 +85,30 @@
   <rect x="634" y="170" width="494" height="18" fill="#161b22"/>
   <text x="654" y="176" font-size="13" fill="#8b949e">pi editor — your conversation</text>
 
-  <text x="654" y="216" font-size="13.5" fill="#6e7681">you: help me refactor auth.ts</text>
-  <text x="654" y="238" font-size="13.5" fill="#6e7681">pi: here's the plan...</text>
-  <text x="654" y="260" font-size="13.5" fill="#6e7681">   ↳ reading auth.ts...</text>
+  <text x="654" y="214" font-size="13.5" fill="#6e7681">you: help me refactor auth.ts</text>
+  <text x="654" y="236" font-size="13.5" fill="#6e7681">pi: here's the plan...</text>
 
   <!-- Editor box -->
-  <rect x="644" y="274" width="474" height="38" rx="6" fill="#161b22" stroke="#30363d"/>
-  <text x="658" y="298" font-size="13.5" fill="#6e7681">▎</text>
+  <rect x="644" y="252" width="474" height="34" rx="6" fill="#161b22" stroke="#30363d"/>
+  <text x="658" y="274" font-size="13.5" fill="#6e7681">▎</text>
 
   <!-- Widget row (the key feature) -->
-  <rect x="644" y="314" width="474" height="32" rx="0" fill="#0f1a14" stroke="#238636" stroke-width="1"/>
-  <text x="658" y="334" font-size="14" fill="#56d364">🟢 5h:14% ↺2h30m</text>
-  <text x="820" y="334" font-size="14" fill="#56d364">  🟢 7d:6% ↺4d12h</text>
-  <text x="1040" y="334" font-size="14" fill="#8b949e">  ⏰5h</text>
-
-  <!-- Widget label -->
-  <line x1="881" y1="330" x2="881" y2="360" stroke="#238636" stroke-width="1" stroke-dasharray="3,3"/>
-  <text x="881" y="372" font-size="12" fill="#3fb950" text-anchor="middle">setWidget — below editor</text>
+  <rect x="644" y="290" width="474" height="30" rx="0" fill="#0f1a14" stroke="#238636" stroke-width="1.5"/>
+  <text x="654" y="310" font-size="13.5" fill="#56d364">🟢 5h:14% ↺2h30m</text>
+  <text x="812" y="310" font-size="13.5" fill="#56d364">  🟢 7d:6% ↺4d12h</text>
+  <text x="1030" y="310" font-size="13.5" fill="#8b949e">  ⏰5h</text>
 
   <!-- Footer row -->
-  <rect x="644" y="347" width="474" height="22" rx="0" fill="#161b22" stroke="#21262d" stroke-width="0.8"/>
-  <text x="658" y="362" font-size="11" fill="#484f58">pi v0.79  ·  claude-opus-4  ·  ctx 12%</text>
+  <rect x="644" y="320" width="474" height="20" rx="0" fill="#161b22" stroke="#21262d" stroke-width="0.8"/>
+  <text x="658" y="334" font-size="11" fill="#484f58">pi v0.79  ·  claude-opus-4  ·  ctx 12%</text>
+
+  <!-- Widget callout -->
+  <text x="881" y="362" font-size="12" fill="#3fb950" text-anchor="middle">↑ green row = setWidget, appears below editor</text>
 
   <!-- /quota panel -->
-  <rect x="644" y="388" width="474" height="42" rx="6" fill="#111d24" stroke="#1f3a4a"/>
-  <text x="658" y="406" font-size="13" fill="#8b949e">$ <tspan fill="#58a6ff">/quota</tspan></text>
-  <text x="658" y="424" font-size="12.5" fill="#3fb950">╭─ Claude Quota ──────────────────────────────╮</text>
+  <rect x="644" y="378" width="474" height="50" rx="6" fill="#111d24" stroke="#1f3a4a"/>
+  <text x="658" y="398" font-size="13" fill="#8b949e">$ <tspan fill="#58a6ff">/quota</tspan>  <tspan fill="#6e7681">— detailed panel ↓</tspan></text>
+  <text x="658" y="418" font-size="12.5" fill="#3fb950">╭─ Claude Quota ────────────────────────╮</text>
 
   <!-- Label under right panel -->
   <text x="881" y="460" font-size="13" fill="#6e7681" text-anchor="middle">← no powerline needed, works out of the box</text>
