@@ -4,12 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ESNext",
+    "allowImportingTsExtensions": true,
     "noEmit": true,
     "skipLibCheck": true
   },
-  "references": [
-    { "path": "./packages/pi-critic-guy" },
-    { "path": "./packages/pi-claude-subs-quota" },
-    { "path": "./packages/pi-write-coach" }
-  ]
+  "files": []
 }

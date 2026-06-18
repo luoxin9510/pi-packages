@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "tsc --build",
+    "check": "tsc -p packages/pi-critic-guy && tsc -p packages/pi-claude-subs-quota && tsc -p packages/pi-write-coach",
     "test": "node --experimental-strip-types --test packages/*/test/*.test.ts"
   },
   "devDependencies": {

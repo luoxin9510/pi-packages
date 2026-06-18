@@ -1,6 +1,6 @@
 {
   "name": "@nukcole-xinluo9510/pi-claude-subs-quota",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "Pi extension — live Claude subscription quota in a status widget",
@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luoxin9510/pi-packages.git",
-    "directory": "packages/pi-subs-quota"
+    "directory": "packages/pi-claude-subs-quota"
   },
   "files": [
     "extensions",
@@ -31,7 +31,7 @@
     "extensions": [
       "./extensions"
     ],
-    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-subs-quota/assets/quota-viz.png"
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-claude-subs-quota/assets/quota-viz.png"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.79"
