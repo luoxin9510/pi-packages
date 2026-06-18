@@ -8,6 +8,7 @@ Monorepo for [@nukcole-xinluo9510](https://www.npmjs.com/~nukcole-xinluo9510) pi
 |---------|-------------|---------|
 | [pi-critic-guy](./packages/pi-critic-guy) | Spawn a second-opinion reviewer by typing `critic` | `pi install npm:@nukcole-xinluo9510/pi-critic-guy` |
 | [pi-claude-subs-quota](./packages/pi-claude-subs-quota) | Live Claude quota widget below the editor | `pi install npm:@nukcole-xinluo9510/pi-claude-subs-quota` |
+| [pi-write-guard](./packages/pi-write-guard) | Block oversized writes/edits, prevent broken files | `pi install npm:@nukcole-xinluo9510/pi-write-guard` |
 
 ## Development
 

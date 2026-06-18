@@ -1,0 +1,37 @@
+{
+  "name": "@nukcole-xinluo9510/pi-write-guard",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Pi extension — block oversized file writes, enforce skeleton + edit pattern to save output tokens",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "write",
+    "tokens",
+    "skeleton",
+    "guard"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luoxin9510/pi-packages.git",
+    "directory": "packages/pi-write-guard"
+  },
+  "files": [
+    "extensions",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.79"
+  }
+}

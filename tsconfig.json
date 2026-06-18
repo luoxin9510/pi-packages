@@ -9,6 +9,7 @@
   },
   "references": [
     { "path": "./packages/pi-critic-guy" },
-    { "path": "./packages/pi-claude-subs-quota" }
+    { "path": "./packages/pi-claude-subs-quota" },
+    { "path": "./packages/pi-write-guard" }
   ]
 }
