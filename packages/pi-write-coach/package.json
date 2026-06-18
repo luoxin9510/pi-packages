@@ -21,6 +21,7 @@
   },
   "files": [
     "extensions",
+    "assets",
     "test",
     "README.md",
     "LICENSE"
@@ -34,7 +35,8 @@
   "pi": {
     "extensions": [
       "./extensions"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-write-coach/assets/coach-viz.png"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.79"

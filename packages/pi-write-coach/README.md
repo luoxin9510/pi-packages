@@ -1,10 +1,16 @@
-# 🛡️ pi-write-coach
+# 🏋️ pi-write-coach
 
-Stop the LLM from landing **broken, half-written files**. When a model tries to
-write a huge file in one shot, the output can be truncated mid-stream and leave
-a corrupted file on disk. `pi-write-coach` forces large files to be built
-incrementally — a skeleton first, then small edits — so nothing can be
-truncated into garbage.
+**A coach for large files — game plan before, whistle after.**
+
+When a model tries to write a large file in one shot, the output can hit
+`max_tokens` mid-stream and land a **truncated, broken file** on disk.
+`pi-write-coach` prevents this by teaching the model to build large files
+incrementally: skeleton first, then small edits — each step too small to
+truncate into garbage.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-write-coach/assets/coach-viz.png" alt="pi-write-coach — game plan before, whistle after" width="840">
+</p>
 
 ```bash
 pi install npm:@nukcole-xinluo9510/pi-write-coach
@@ -12,62 +18,97 @@ pi install npm:@nukcole-xinluo9510/pi-write-coach
 
 ---
 
-## What it does (two honest layers)
-
-### 1. STEER — `before_agent_start`
-Injects a short policy into the system prompt telling the model to build large
-files with a skeleton + incremental edits **before** it generates. This is the
-part that actually saves output tokens, because it changes behaviour ahead of
-generation.
-
-### 2. GUARD — `tool_call` on `write` + `edit`
-Blocks any single `write` or `edit` larger than the limit. Its job is **file
-safety**: a giant single operation can be truncated mid-stream and land a
-broken file. Guarding forces the work into small pieces that cannot be
-truncated into garbage.
-
-> **Honest note:** a `tool_call` block fires *after* the model already emitted
-> the call as output tokens, so the GUARD does **not** save those tokens. It
-> protects the file on disk. The token savings come from the STEER layer.
-
-When blocked, the model receives concrete guidance:
+## The problem
 
 ```
-Blocked an oversized write: 342 lines / 11200 chars (limit 200 lines / 8000 chars).
-A single write this large can be truncated mid-stream and land a broken file.
-
-Build it incrementally instead:
-1. write a compact skeleton — imports, signatures, and a // TODO: <what>
-   placeholder line for each section.
-2. edit each // TODO placeholder one at a time with its real content.
+model wants to write 800-line file
+  → emits 15,000+ output tokens in one shot
+  → hits max_tokens limit mid-stream
+  → auth.ts lands on disk: broken, half-written
+  → you need to ask it to rewrite anyway
 ```
 
-## Defaults
+## The solution
 
-| Setting | Value | Meaning |
-|---------|-------|---------|
-| `MAX_LINES` | 200 | Block a single write/edit over this many lines |
-| `MAX_CHARS` | 8000 | …or over this many characters |
-| `RELEASE_AFTER_BLOCKS` | 2 | After N blocks on one path, release it permanently (no retry loops) |
-| guarded models | `claude`, `deepseek` | Only big-context models where chunking matters |
+```
+STEER injects the game plan:
+  → write a skeleton first (imports, signatures, // TODO markers)
+  → then edit each section one at a time
 
-Generated/lock/minified files (`package-lock.json`, `*.min.js`, `dist/**`,
-`*.generated.*`, …) are never blocked.
+GUARD blows the whistle if a write is still too big:
+  → blocks single writes/edits over 200 lines / 8000 chars
+  → tells the model exactly how to fix it
+  → releases path after 2 blocks to prevent retry loops
+```
 
-## Design notes
+---
 
-- **Loop-safe:** after a path is blocked `RELEASE_AFTER_BLOCKS` times it is
-  released for the rest of the session, so a model that genuinely must write a
-  large file is never trapped in an infinite retry.
-- **Covers the edit side-door:** a "3-line skeleton + one giant `edit`" bypass
-  is caught because the guard sizes the total replacement output of the call.
-- **Model detection:** reads the live current model; if the model is unknown
-  (only momentarily at startup) it skips rather than wrongly guarding
-  non-target models.
+## Two honest layers
+
+### STEER — `before_agent_start`
+
+Injects a large-file policy into the system prompt **before** the model
+generates anything. This is the part that actually saves output tokens —
+it changes model behaviour ahead of generation.
+
+### GUARD — `tool_call` (write + edit)
+
+Blocks oversized single writes and edits. Its job is **file safety**: a
+giant single write can be truncated mid-stream and land a broken file.
+The guard forces the work into small, untruncatable pieces.
+
+> **Honest note:** `tool_call` fires *after* the model already emitted
+> the call as output tokens — the GUARD does **not** recover those tokens.
+> It protects the file on disk. Token savings come from STEER only.
+
+---
+
+## What it guards
+
+| Operation | What is measured | When blocked |
+|-----------|-----------------|--------------|
+| `write` | `content` length | > 200 lines OR > 8000 chars |
+| `edit` | sum of all `edits[].newText` | > 200 lines OR > 8000 chars |
+
+The "3-line skeleton + 1 giant edit" bypass is caught: the guard sums
+the total replacement output of the call, not per-edit.
+
+**Never blocked:** `package-lock.json`, `*.min.js`, `*.lock`,
+`*.generated.*`, `dist/**` (add custom paths by extending `ALLOWLIST`
+in `core.ts`).
+
+## Loop-breaker
+
+After a path is blocked `RELEASE_AFTER_BLOCKS` times (default: 2), it
+is permanently released for the session. A model that genuinely must
+write a large file is never trapped in an infinite retry loop.
+
+## Guarded models
+
+Only applies to big-context models where chunking matters most:
+`claude` and `deepseek` (substring match on `provider/id`). Other models
+(gpt, gemini, local) are never affected.
+
+## Install
+
+```bash
+pi install npm:@nukcole-xinluo9510/pi-write-coach
+```
 
 ## Requirements
 
 - pi 0.79+
+
+## Testing
+
+```bash
+cd packages/pi-write-coach
+npm test   # 49 unit tests, no pi runtime needed
+```
+
+Covers: `countLines`, `isGuardedModelKey`, `isAllowlistedPath`,
+`measureEdits`, `createSizeGuard` state machine (block → loop-breaker →
+release → permanent pass), `guidance` message content.
 
 ## License
 

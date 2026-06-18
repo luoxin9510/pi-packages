@@ -1,0 +1,115 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','JetBrains Mono','Fira Code',Menlo,Consolas,monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#010409"/>
+      <stop offset="1" stop-color="#05080d"/>
+    </linearGradient>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6e7681"/>
+    </marker>
+    <marker id="arrowD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="90">
+      <path d="M0,0 L10,5 L0,10 z" fill="#da3633"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="720" fill="url(#bg)"/>
+
+  <!-- Terminal window -->
+  <rect x="40" y="40" width="1120" height="640" rx="16" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+
+  <!-- Title bar -->
+  <rect x="40" y="40" width="1120" height="54" rx="16" fill="#161b22"/>
+  <rect x="40" y="76" width="1120" height="18" fill="#161b22"/>
+  <circle cx="74" cy="67" r="7" fill="#ff5f56"/>
+  <circle cx="98" cy="67" r="7" fill="#ffbd2e"/>
+  <circle cx="122" cy="67" r="7" fill="#27c93f"/>
+  <text x="600" y="75" font-size="23" font-weight="700" fill="#e6edf3" text-anchor="middle">🏋️ pi-write-coach</text>
+
+  <!-- Tagline -->
+  <text x="600" y="114" font-size="16" fill="#8b949e" text-anchor="middle">a coach for large files — <tspan fill="#c9d1d9" font-style="italic">game plan before, whistle after</tspan></text>
+
+  <!-- ═══════════ PANEL HEADERS ═══════════ -->
+
+  <!-- Left header: danger -->
+  <rect x="68" y="130" width="524" height="34" rx="8" fill="#1a0c0c"/>
+  <text x="88" y="153" font-size="14" font-weight="700" fill="#f85149">❌  without pi-write-coach</text>
+
+  <!-- Right header: safe -->
+  <rect x="608" y="130" width="524" height="34" rx="8" fill="#0c1a0c"/>
+  <text x="628" y="153" font-size="14" font-weight="700" fill="#3fb950">✅  with pi-write-coach</text>
+
+  <!-- ═══════════ LEFT PANEL CONTENT ═══════════ -->
+  <rect x="68" y="164" width="524" height="226" rx="0" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Code: big write attempt -->
+  <text x="88" y="190" font-size="13" fill="#6e7681">$ write({</text>
+  <text x="88" y="210" font-size="13" fill="#6e7681">    path: <tspan fill="#a5d6ff">"auth.ts"</tspan>,</text>
+  <text x="88" y="230" font-size="13" fill="#6e7681">    content: <tspan fill="#f0883e">800 lines…</tspan></text>
+  <text x="88" y="250" font-size="13" fill="#6e7681">  })</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="258" x2="200" y2="280" stroke="#da3633" stroke-width="1.5" marker-end="url(#arrowD)"/>
+
+  <!-- Truncation warning -->
+  <rect x="80" y="284" width="500" height="36" rx="4" fill="#1a0c0c"/>
+  <text x="96" y="308" font-size="13" fill="#f85149">⚡  Turn 96: 15,353 output tokens — truncated mid-stream</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="322" x2="200" y2="342" stroke="#da3633" stroke-width="1.5" marker-end="url(#arrowD)"/>
+
+  <!-- Broken file result -->
+  <rect x="80" y="346" width="500" height="36" rx="4" fill="#130d0d" stroke="#da3633" stroke-width="1"/>
+  <text x="96" y="370" font-size="13" fill="#f85149">✗  auth.ts  — broken, half-written</text>
+
+  <!-- ═══════════ RIGHT PANEL CONTENT ═══════════ -->
+  <rect x="608" y="164" width="524" height="226" rx="0" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+
+  <!-- STEER injection note -->
+  <rect x="618" y="172" width="504" height="24" rx="4" fill="#0c1a2e"/>
+  <text x="630" y="188" font-size="12" fill="#58a6ff">[system]  large-file policy injected  ←  STEER</text>
+
+  <!-- Skeleton write -->
+  <text x="628" y="215" font-size="13" fill="#8b949e">$ write  <tspan fill="#a5d6ff">auth.ts</tspan>  <tspan fill="#c9d1d9">skeleton</tspan>        <tspan fill="#6e7681">28 lines</tspan>  <tspan fill="#3fb950">✓</tspan></text>
+
+  <!-- Edits -->
+  <text x="628" y="239" font-size="13" fill="#8b949e">$ edit   <tspan fill="#a5d6ff">auth.ts</tspan>  <tspan fill="#c9d1d9">TokenService</tspan>     <tspan fill="#6e7681">45 lines</tspan>  <tspan fill="#3fb950">✓</tspan></text>
+  <text x="628" y="263" font-size="13" fill="#8b949e">$ edit   <tspan fill="#a5d6ff">auth.ts</tspan>  <tspan fill="#c9d1d9">AuthMiddleware</tspan>   <tspan fill="#6e7681">38 lines</tspan>  <tspan fill="#3fb950">✓</tspan></text>
+  <text x="628" y="287" font-size="13" fill="#8b949e">$ edit   <tspan fill="#a5d6ff">auth.ts</tspan>  <tspan fill="#c9d1d9">SessionHandler</tspan>   <tspan fill="#6e7681">52 lines</tspan>  <tspan fill="#3fb950">✓</tspan></text>
+
+  <!-- Complete file result -->
+  <rect x="618" y="346" width="504" height="36" rx="4" fill="#0f2620" stroke="#238636" stroke-width="1"/>
+  <text x="634" y="370" font-size="13" fill="#3fb950">✓  auth.ts  — complete, 163 lines</text>
+
+  <!-- ═══════════ MECHANISM SECTION ═══════════ -->
+
+  <!-- STEER box (blue) -->
+  <rect x="68" y="406" width="524" height="118" rx="8" fill="#0d1117" stroke="#1f6feb" stroke-width="1.2"/>
+  <rect x="68" y="406" width="524" height="34" rx="8" fill="#0c1a2e"/>
+  <rect x="68" y="424" width="524" height="16" fill="#0c1a2e"/>
+  <text x="88" y="429" font-size="13" font-weight="700" fill="#58a6ff">STEER  —  before_agent_start</text>
+  <text x="88" y="454" font-size="12.5" fill="#8b949e">Injects large-file policy into the system prompt before the model</text>
+  <text x="88" y="472" font-size="12.5" fill="#8b949e">generates anything. This is the part that <tspan fill="#c9d1d9">actually saves tokens</tspan>:</text>
+  <text x="88" y="490" font-size="12.5" fill="#8b949e">it changes model behaviour <tspan fill="#c9d1d9">before output is produced.</tspan></text>
+  <text x="88" y="514" font-size="12" fill="#1f6feb">⚡ the only real token saver in the extension</text>
+
+  <!-- GUARD box (green) -->
+  <rect x="608" y="406" width="524" height="118" rx="8" fill="#0d1117" stroke="#238636" stroke-width="1.2"/>
+  <rect x="608" y="406" width="524" height="34" rx="8" fill="#0c1a2e"/>
+  <rect x="608" y="424" width="524" height="16" fill="#0c1a2e"/>
+  <text x="628" y="429" font-size="13" font-weight="700" fill="#3fb950">GUARD  —  tool_call  (write + edit)</text>
+  <text x="628" y="454" font-size="12.5" fill="#8b949e">Blocks single writes/edits over 200 lines / 8000 chars.</text>
+  <text x="628" y="472" font-size="12.5" fill="#8b949e">Purpose: <tspan fill="#c9d1d9">file safety</tspan>. A truncated write lands a broken file.</text>
+  <text x="628" y="490" font-size="12.5" fill="#8b949e">Loop-breaker: releases path after 2 blocks — no infinite retry.</text>
+  <text x="628" y="514" font-size="12" fill="#238636">🛡  fires after output is generated — protects disk, not tokens</text>
+
+  <!-- ═══════════ BOTTOM TAGLINE ═══════════ -->
+  <text x="600" y="584" font-size="28" font-weight="700" fill="#58a6ff" text-anchor="middle" font-style="italic">"game plan before, whistle after"</text>
+  <text x="600" y="622" font-size="14" fill="#6e7681" text-anchor="middle">guides claude &amp; deepseek models to build large files incrementally · prevents truncated broken files</text>
+
+  <!-- ═══════════ DIVIDER ═══════════ -->
+  <line x1="596" y1="130" x2="596" y2="390" stroke="#30363d" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Honest note -->
+  <text x="600" y="660" font-size="12.5" fill="#484f58" text-anchor="middle">49 unit tests · two honest layers · zero extra API calls</text>
+</svg>
