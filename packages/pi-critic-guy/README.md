@@ -58,6 +58,8 @@ instead of a 1000-line tool. It's the most pi-native way to get a critic.
   actually type `critic`. Silent the rest of the time.
 - 🎯 **Model-aware** — resolves the reviewer model from your current session, or one you
   name with `using <name>` / `model=<id>`.
+- ⚖️ **Actionable verdict** — every review sorts findings into BAD / UGLY / OK and ends
+  with a machine-readable `VERDICT: PASS/FAIL` line (PASS only when nothing is BAD or UGLY).
 
 ## Install
 
@@ -105,6 +107,26 @@ Critic Guy hooks `before_agent_start`. On any turn where you mention `critic`:
 If the system prompt is already very large, Critic Guy skips injection that turn and says
 so — it never silently no-ops.
 
+## The critic's contract
+
+The one thing Critic Guy *does* standardize is the **output** — a predictable verdict is
+what makes the result actionable:
+
+- **Severity buckets** — every finding is sorted into **BAD** (broken or unsafe — must
+  fix), **UGLY** (smell, unclear, or untested — should fix), or **OK** (fine / done well).
+- **Clear pass/fail** — the critic closes with a single line: `VERDICT: PASS` only when
+  there are zero BAD and zero UGLY findings, otherwise `VERDICT: FAIL`.
+- **No hanging** — running non-interactively, the critic never asks questions or waits for
+  input; if something's missing it states an assumption and judges anyway, then closes
+  with its `VERDICT:` line. A missing verdict is itself a signal the run didn't finish.
+- **Timeout = split, not repeat** — if a critic times out or returns no verdict, the model
+  re-runs on smaller, **non-overlapping** slices (one identical retry is allowed for a
+  transient hiccup) instead of blindly repeating the same run; if a target is already a
+  minimal unit, it stops and reports the timeout instead.
+
+`parseVerdict()` is exported as a small helper for CI or programmatic callers that want to
+read that final line (`PASS` / `FAIL` / `null` when absent).
+
 ## Requirements
 
 - pi 0.79+
@@ -115,7 +137,7 @@ so — it never silently no-ops.
 
 ```bash
 npm run check   # tsc --noEmit
-npm test        # node --test (matchModel + parseModelQuery)
+npm test        # node --test (matchModel, parseModelQuery, parseVerdict)
 ```
 
 ## License
