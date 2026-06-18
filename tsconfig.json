@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "references": [
+    { "path": "./packages/pi-critic-guy" },
+    { "path": "./packages/pi-subs-quota" }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@nukcole-xinluo9510/pi-subs-quota",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Pi extension — live Claude subscription quota in a status widget",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "claude",
+    "quota",
+    "subscription",
+    "usage"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luoxin9510/pi-packages.git",
+    "directory": "packages/pi-subs-quota"
+  },
+  "files": [
+    "extensions",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.79"
+  }
+}

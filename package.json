@@ -1,0 +1,14 @@
+{
+  "name": "@nukcole-xinluo9510/pi-packages",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "tsc --build",
+    "test": "node --experimental-strip-types --test packages/*/test/*.test.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
