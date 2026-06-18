@@ -23,6 +23,7 @@
   },
   "files": [
     "extensions",
+    "assets",
     "README.md",
     "LICENSE"
   ],
@@ -33,7 +34,7 @@
     "extensions": [
       "./extensions"
     ],
-    "image": "https://raw.githubusercontent.com/luoxin9510/pi-critic-guy/main/assets/philosophy.png"
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-critic-guy/assets/philosophy.png"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.79"

@@ -6,7 +6,7 @@ second opinion — from an independent, read-only reviewer you spawn with a sing
 No extra tools. No agent files. No configuration. Just say `critic`.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/luoxin9510/pi-critic-guy/main/assets/philosophy.png" alt="Critic Guy — freedom in the middle, rails at the edge" width="840">
+  <img src="https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-critic-guy/assets/philosophy.png" alt="Critic Guy — freedom in the middle, rails at the edge" width="840">
 </p>
 
 ```
