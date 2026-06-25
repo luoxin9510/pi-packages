@@ -9,6 +9,7 @@ Monorepo for [@nukcole-xinluo9510](https://www.npmjs.com/~nukcole-xinluo9510) pi
 | [pi-critic-guy](./packages/pi-critic-guy) | Spawn a second-opinion reviewer by typing `critic` | `pi install npm:@nukcole-xinluo9510/pi-critic-guy` |
 | [pi-claude-subs-quota](./packages/pi-claude-subs-quota) | Live Claude quota widget below the editor | `pi install npm:@nukcole-xinluo9510/pi-claude-subs-quota` |
 | [pi-write-coach](./packages/pi-write-coach) | Coach the model to build large files incrementally, prevent broken files | `pi install npm:@nukcole-xinluo9510/pi-write-coach` |
+| [pi-fun-working](./packages/pi-fun-working) | Themed, randomly-colored working-status memes for every hook | `pi install npm:@nukcole-xinluo9510/pi-fun-working` |
 
 ## Development
 

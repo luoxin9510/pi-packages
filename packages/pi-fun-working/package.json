@@ -1,0 +1,44 @@
+{
+  "name": "@nukcole-xinluo9510/pi-fun-working",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Pi extension — turn the boring \"Working...\" line into themed, randomly-colored memes for every hook",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "working-message",
+    "status",
+    "spinner",
+    "memes",
+    "fun"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luoxin9510/pi-packages.git",
+    "directory": "packages/pi-fun-working"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test test/index.test.ts"
+  },
+  "files": [
+    "extensions",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/fun-working/index.ts"
+    ],
+    "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-fun-working/assets/banner.png"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.79"
+  }
+}
