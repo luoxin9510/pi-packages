@@ -1,6 +1,6 @@
 {
   "name": "@nukcole-xinluo9510/pi-critic-guy",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "description": "Pi extension — spawn a second-opinion reviewer by typing \"critic\"",
@@ -32,7 +32,7 @@
   },
   "pi": {
     "extensions": [
-      "./extensions"
+      "./extensions/critic-guy.ts"
     ],
     "image": "https://raw.githubusercontent.com/luoxin9510/pi-packages/main/packages/pi-critic-guy/assets/philosophy.png"
   },
