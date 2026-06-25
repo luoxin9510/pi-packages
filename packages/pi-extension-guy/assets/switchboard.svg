@@ -1,0 +1,92 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','JetBrains Mono','Fira Code',Menlo,Consolas,monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#010409"/>
+      <stop offset="1" stop-color="#05080d"/>
+    </linearGradient>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#bg)"/>
+
+  <!-- terminal window -->
+  <rect x="40" y="40" width="1120" height="640" rx="16" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+  <circle cx="74" cy="74" r="7" fill="#ff5f56"/>
+  <circle cx="98" cy="74" r="7" fill="#ffbd2e"/>
+  <circle cx="122" cy="74" r="7" fill="#27c93f"/>
+  <text x="600" y="81" font-size="22" font-weight="700" fill="#e6edf3" text-anchor="middle">🧩 extension-guy</text>
+
+  <!-- supporting line -->
+  <text x="600" y="146" font-size="18" fill="#8b949e" text-anchor="middle">Every local extension on one panel — <tspan fill="#c9d1d9" font-style="italic">flip a switch, hot-reload live.</tspan></text>
+
+  <!-- ===== switch panel band ===== -->
+  <rect x="80" y="176" width="300" height="30" rx="15" fill="#3fb950" fill-opacity="0.13"/>
+  <text x="100" y="196" font-size="16" font-weight="700" fill="#3fb950" letter-spacing="1">/extensions — flip any switch</text>
+
+  <!-- panel -->
+  <rect x="80" y="222" width="1040" height="244" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+
+  <!-- row 1: ON -->
+  <text x="120" y="263" font-size="19" fill="#c9d1d9">git-checkpoint</text>
+  <text x="360" y="263" font-size="15" fill="#6e7681">file</text>
+  <rect x="952" y="247" width="64" height="30" rx="15" fill="#238636" fill-opacity="0.85"/>
+  <circle cx="999" cy="262" r="11" fill="#e6edf3"/>
+  <text x="1040" y="267" font-size="14" font-weight="700" fill="#3fb950">ON</text>
+
+  <!-- row 2: OFF -->
+  <text x="120" y="311" font-size="19" fill="#6e7681">doom-overlay</text>
+  <text x="360" y="311" font-size="15" fill="#6e7681">index-dir</text>
+  <rect x="952" y="295" width="64" height="30" rx="15" fill="#30363d"/>
+  <circle cx="969" cy="310" r="11" fill="#8b949e"/>
+  <text x="1037" y="315" font-size="14" font-weight="700" fill="#6e7681">OFF</text>
+
+  <!-- row 3: ON -->
+  <text x="120" y="359" font-size="19" fill="#c9d1d9">my-tools</text>
+  <text x="360" y="359" font-size="15" fill="#6e7681">manifest-dir</text>
+  <rect x="952" y="343" width="64" height="30" rx="15" fill="#238636" fill-opacity="0.85"/>
+  <circle cx="999" cy="358" r="11" fill="#e6edf3"/>
+  <text x="1040" y="363" font-size="14" font-weight="700" fill="#3fb950">ON</text>
+
+  <!-- row 4: LOCKED (self) -->
+  <text x="120" y="407" font-size="19" fill="#6e7681">extension-guy</text>
+  <text x="360" y="407" font-size="15" fill="#6e7681">self</text>
+  <g transform="translate(972,390)">
+    <path d="M4,9 v-3 a6,6 0 0 1 12,0 v3" fill="none" stroke="#6e7681" stroke-width="2.4"/>
+    <rect x="0" y="9" width="20" height="15" rx="2.5" fill="#6e7681"/>
+    <circle cx="10" cy="15" r="2" fill="#161b22"/>
+  </g>
+  <text x="1018" y="407" font-size="14" font-weight="700" fill="#6e7681">LOCKED</text>
+
+  <!-- footer hint inside panel -->
+  <text x="120" y="446" font-size="15" fill="#6e7681">↑/↓ move  ·  space toggle  ·  <tspan fill="#8b949e">enter apply + reload</tspan>  ·  esc cancel</text>
+
+  <!-- ===== mechanism strip ===== -->
+  <rect x="80" y="498" width="290" height="30" rx="15" fill="#58a6ff" fill-opacity="0.13"/>
+  <text x="100" y="518" font-size="16" font-weight="700" fill="#58a6ff" letter-spacing="1">the whole trick</text>
+
+  <g font-size="18">
+    <rect x="120" y="544" width="150" height="40" rx="9" fill="#11261a" stroke="#238636"/>
+    <text x="195" y="570" fill="#56d364" text-anchor="middle">foo.ts</text>
+
+    <line x1="278" y1="564" x2="338" y2="564" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowB)" marker-start="url(#arrowB)"/>
+    <text x="308" y="538" fill="#6e7681" text-anchor="middle" font-size="13">rename</text>
+
+    <rect x="346" y="544" width="226" height="40" rx="9" fill="#1c1410" stroke="#9e6a03"/>
+    <text x="459" y="570" fill="#d29922" text-anchor="middle">foo.ts.disabled</text>
+
+    <line x1="592" y1="564" x2="664" y2="564" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrowB)"/>
+
+    <rect x="672" y="544" width="178" height="40" rx="9" fill="#0d1d33" stroke="#1f6feb"/>
+    <text x="761" y="570" fill="#58a6ff" text-anchor="middle">hot reload</text>
+
+    <text x="880" y="570" fill="#8b949e" font-size="16">→ live, no restart</text>
+  </g>
+
+  <!-- hero tagline -->
+  <text x="600" y="636" font-size="29" font-weight="700" fill="#58a6ff" text-anchor="middle" font-style="italic">"the filename is the switch"</text>
+
+  <!-- footnote -->
+  <text x="600" y="668" font-size="14.5" fill="#6e7681" text-anchor="middle">🧩 <tspan fill="#8b949e">zero core changes</tspan>  ·  🗄️ <tspan fill="#8b949e">the filesystem is the database</tspan>  ·  🪶 <tspan fill="#8b949e">no config, no deps</tspan></text>
+</svg>
