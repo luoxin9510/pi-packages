@@ -1,0 +1,19 @@
+{
+  "name": "@nukcole-xinluo9510/pi-web-status-guy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Config-driven server status panel plugin for PI WEB — define probes in .pi-web/status.json, see ✓/✗ at a glance.",
+  "piWeb": {
+    "plugins": [
+      { "id": "status-guy", "module": "dist/pi-web-plugin.js" }
+    ]
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "devDependencies": {
+    "@jmfederico/pi-web": "^1.202607.0"
+  }
+}
