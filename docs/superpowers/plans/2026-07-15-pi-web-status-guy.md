@@ -68,6 +68,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
+    "allowImportingTsExtensions": false,
     "outDir": "dist",
     "rootDir": "src",
     "declaration": false
@@ -75,6 +76,8 @@
   "include": ["src"]
 }
 ```
+
+(两个要点:① 根 tsconfig 开了 `allowImportingTsExtensions: true`,该选项只允许配合 `noEmit`——这里既然要产物,必须显式关掉,否则 tsc 报 TS5096;② `include` 只有 `src`、不含 `test`——这是有意取舍:`rootDir: "src"` 下纳入 test 会报 TS6059,且本包没有能"泄漏" `@types/node` 的 peerDependency,测试文件的类型正确性由 `node --experimental-strip-types --test` 实跑保证。)
 
 根 `package.json` 的 `check` 脚本(硬编码逐包列举,不会自动覆盖新包)追加本包:
 
@@ -446,6 +449,7 @@ const resultChangedEvent = "pi-web-status-guy-result-changed";
 type PanelState =
 	| { kind: "loading" }
 	| { kind: "missing" }
+	| { kind: "collecting" }
 	| { kind: "loaded"; result: StatusResult; refreshing: boolean }
 	| { kind: "error"; message: string; refreshing: boolean };
 
@@ -517,9 +521,10 @@ class StatusGuyPanel extends HTMLElement {
 		const context = this.contextValue;
 		if (context === undefined) return;
 		const current = stateCache.get(cacheKey(context));
+		if (current?.kind === "collecting") return;
 		if (current !== undefined && "refreshing" in current && current.refreshing) return;
 		if (current?.kind === "loaded") setState(context, { ...current, refreshing: true });
-		else setState(context, { kind: "error", message: "正在采集……", refreshing: true });
+		else setState(context, { kind: "collecting" });
 		try {
 			await context.files.writeFile(RUNNER_PATH, RUNNER_SOURCE);
 			const handle = await context.terminal.runCommand({
@@ -560,6 +565,7 @@ function cacheKey(context: WorkspacePanelContext): string {
 
 function renderState(state: PanelState): string {
 	if (state.kind === "loading") return `<section class="viewer"><p class="muted">读取上次采集结果……</p></section>`;
+	if (state.kind === "collecting") return `<section class="viewer"><p class="muted">正在采集……</p>${refreshButton(true)}</section>`;
 	if (state.kind === "missing") {
 		return `<section class="viewer"><p><strong>还没有采集结果</strong></p><p class="muted">确认 workspace 里有 ${escapeHtml(CONFIG_PATH)},然后点击刷新。</p>${refreshButton(false)}</section>`;
 	}
@@ -629,7 +635,8 @@ button[disabled] { cursor: wait; opacity: 0.6; }
 
 ```ts
 import type { PiWebPlugin } from "@jmfederico/pi-web/plugin-api";
-import { defineStatusPanelElement, statusPanelBadge, statusPanelTagName } from "./statusPanelElement.js";
+// 模板里的标签名是字面量,须与 statusPanelElement.ts 的 statusPanelTagName("pi-web-status-guy-panel")保持一致
+import { defineStatusPanelElement, statusPanelBadge } from "./statusPanelElement.js";
 
 const plugin: PiWebPlugin = {
 	apiVersion: 1,
@@ -660,7 +667,7 @@ const plugin: PiWebPlugin = {
 export default plugin;
 ```
 
-(注:模板里的自定义元素名与 `statusPanelTagName` 常量一致;若 tsc 报 `statusPanelTagName` 未使用,把 render 里的标签名改为插值不可行——lit 静态标签必须字面量——保留 import 并在文件顶部 `void statusPanelTagName;` 或直接去掉该 import,取舍交给实施时的 lint 现实。)
+(注:lit 静态标签必须是字面量,无法引用常量插值,所以入口不 import `statusPanelTagName`,靠注释约定两处一致——改元素名时两处同步。)
 
 - [ ] **Step 3: 构建 + 类型检查**
 
@@ -704,7 +711,7 @@ cd ~/Developer/pi-web && PI_WEB_DATA_DIR=~/Developer/pi-web-plugin-lab/data npm 
 { "version": 1, "probes": [{ "id": "spike", "title": "Spike", "group": "system", "command": "echo spike-ok" }] }
 ```
 
-在 dev 实例 UI 中把该目录加为 workspace,打开 Status 面板点刷新。**验收链路逐环取证**:`open:false` 的 runCommand 发出(Network 面板或 server 日志)→ `handle.completed` 落定 → `.pi-web/status-result.json` 落盘且含 `"detail": "spike-ok"` → 面板渲染出 ✓ 行。任何一环不通,先修这一环再继续。
+把该目录加为 workspace(**注意:这一步是新地形**——此前实战笔记的验证止步于 manifest HTTP 证据,没走过 UI 加 workspace)。两条路径按序尝试:① dev 实例 UI 首页的项目/工作区添加入口(pi-web 就是工作区管理器,首页即列表,找 "Add project/workspace" 类控件,输入 `~/Developer/pi-web-plugin-lab/status-guy-e2e` 绝对路径);② UI 找不到入口时,查 `~/Developer/pi-web/src/server/projects/projectService.ts` 与 `src/server/storage/projectStore.ts` 确认 `$PI_WEB_DATA_DIR/projects.json` 的确切格式,停实例→手写该文件→重启。然后打开 Status 面板点刷新。**验收链路逐环取证**:`open:false` 的 runCommand 发出(Network 面板或 server 日志)→ `handle.completed` 落定 → `.pi-web/status-result.json` 落盘且含 `"detail": "spike-ok"` → 面板渲染出 ✓ 行。任何一环不通,先修这一环再继续。
 
 - [ ] **Step 3: 全链路场景**(在同一 workspace 扩展配置)
 
@@ -741,7 +748,7 @@ Ctrl-C 停 dev,`rm ~/Developer/pi-web-plugin-lab/data/plugins/status-guy`(symlin
 - [ ] **Step 1: SSH 只读发现探测事实**(spec §6:pi-web 双服务/x-ui/tailscale 无现成文档,从零确认)
 
 ```bash
-~/Developer/vps-setup/vps-ssh.sh 'bash -lc "export XDG_RUNTIME_DIR=/run/user/0; systemctl --user list-units --no-pager | head; systemctl list-units --type=service --no-pager | grep -iE \"x-ui|xray|rclone\"; docker ps --format \"{{.Names}} {{.Status}}\"; tailscale status --peers=false 2>&1 | head -3; cat ~/.pi-web/projects.json 2>/dev/null | head -40; echo NODE=$(node --version)"'
+~/Developer/vps-setup/vps-ssh.sh 'bash -lc "export XDG_RUNTIME_DIR=/run/user/0; systemctl --user list-units --no-pager | head; systemctl list-units --type=service --no-pager | grep -iE \"x-ui|xray|rclone\"; docker ps --format \"{{.Names}} {{.Status}}\"; tailscale status --peers=false 2>&1 | head -3; cat ~/.pi-web/projects.json 2>/dev/null | head -40; echo DATA_DIR=${PI_WEB_DATA_DIR:-unset}; ls ~/.pi-web; echo NODE=$(node --version)"'
 ```
 
 记录:确切服务名、docker 容器名、tailscale 输出形态、**现有 workspace 列表(决定配置放哪个 workspace——选用户日常用的那个;projects.json 为空则先在 UI 建一个,与用户确认目录)**。
@@ -777,11 +784,12 @@ ps -o rss= -p $(systemctl --user show -p MainPID --value pi-web-sessiond.service
 cd ~/Developer/pi-packages/packages/pi-web-status-guy && npm run build
 tar czf /tmp/status-guy.tgz package.json dist README.md
 ~/Developer/vps-setup/vps-ssh.sh 'mkdir -p ~/.pi-web/plugins/status-guy'
-scp 用 vps-ssh.sh 同款参数(读 vps-setup/.env 的密钥与主机)把 tgz 传上去并解包到 ~/.pi-web/plugins/status-guy/
+# vps-ssh.sh 是纯 ssh 封装,没有 scp 版——直接管道传输,不用另拼 scp 参数:
+cat /tmp/status-guy.tgz | ~/Developer/vps-setup/vps-ssh.sh 'tar xzf - -C ~/.pi-web/plugins/status-guy'
 ~/Developer/vps-setup/vps-ssh.sh 'ls ~/.pi-web/plugins/status-guy/dist/pi-web-plugin.js'
 ```
 
-(VPS `PI_WEB_DATA_DIR` 未设,默认 `~/.pi-web`——Task 1 的 vps-facts 已核实其 config 在 `~/.config/pi-web`,数据目录走默认。)本地插件发现带 mtime cache-buster,无需重启服务;浏览器刷新即可。
+期望:最后一条列出 `dist/pi-web-plugin.js`。(VPS `PI_WEB_DATA_DIR` 未设、数据目录走默认 `~/.pi-web`——依据是 2026-07-15 升级实操的 SSH 核实,记录在 `~/Developer/pi-agent-study/docs/pi-web-vps-facts.md`;Step 1 的探测命令里再跑一次 `echo ${PI_WEB_DATA_DIR:-unset}; ls ~/.pi-web` 现场复核。)本地插件发现带 mtime cache-buster,无需重启服务;浏览器刷新即可。
 
 - [ ] **Step 4: 写入目标 workspace 的真实配置**(Step 2 定稿内容,含 `XDG_RUNTIME_DIR` 前缀与 `test` 包装;若 workspace 是 git 仓库,追加 .gitignore 两行)并在自己浏览器先验:面板出现、刷新后四组真实状态、badge 正确。
 
