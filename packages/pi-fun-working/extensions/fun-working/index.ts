@@ -145,6 +145,9 @@ export default function (pi: ExtensionAPI) {
 
 	// ---- Event messages (pass / fail / etc) ----------------------------
 	let agentStartedAt = Date.now();
+	// Status clears still pending; a ctx is stale after /new, /resume or any session
+	// switch, so they are cancelled on session_shutdown instead of firing late.
+	const clearTimers = new Set<ReturnType<typeof setTimeout>>();
 
 	// Dispatch a configured event message to its channel.
 	function emit(key: string, ctx: ExtensionContext, vars: Record<string, string | number> = {}) {
@@ -163,7 +166,15 @@ export default function (pi: ExtensionAPI) {
 			const shown = SETTINGS.events.colorizeStatus ? color(text, randomColor()) : text;
 			ctx.ui.setStatus(statusKey, shown);
 			if (cfg.clearAfterMs && cfg.clearAfterMs > 0) {
-				setTimeout(() => ctx.ui.setStatus(statusKey, undefined), cfg.clearAfterMs);
+				const timer = setTimeout(() => {
+					clearTimers.delete(timer);
+					try {
+						ctx.ui.setStatus(statusKey, undefined);
+					} catch {
+						// session replaced meanwhile
+					}
+				}, cfg.clearAfterMs);
+				clearTimers.add(timer);
 			}
 		}
 	}
@@ -177,7 +188,11 @@ export default function (pi: ExtensionAPI) {
 		stop(ctx);
 		emit("agentDone", ctx, { ms: Date.now() - agentStartedAt });
 	});
-	pi.on("session_shutdown", async (_event, ctx) => stop(ctx));
+	pi.on("session_shutdown", async (_event, ctx) => {
+		for (const timer of clearTimers) clearTimeout(timer);
+		clearTimers.clear();
+		stop(ctx);
+	});
 
 	pi.on("tool_execution_start", async (event, ctx) => {
 		emit("toolStart", ctx, { tool: event.toolName });
